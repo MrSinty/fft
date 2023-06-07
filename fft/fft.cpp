@@ -6,28 +6,24 @@
 
 class FFT {
 public:
-    // Конструктор
+
     FFT() {}
 
-    // Прямое преобразование Фурье
+
     std::vector<std::complex<double>> fft(std::vector<std::complex<double>>& x) {
         int n = x.size();
 
-        // Базовый полином
         if (n == 1) return x;
 
-        // Распаковка значений из массива
         std::vector<std::complex<double>> even(n / 2), odd(n / 2);
         for (int i = 0; i < n / 2; ++i) {
             even[i] = x[2 * i];
             odd[i] = x[2 * i + 1];
         }
 
-        // Рекурсивные вызовы
         std::vector<std::complex<double>> q = fft(even);
         std::vector<std::complex<double>> r = fft(odd);
 
-        // Сложение результатов
         std::vector<std::complex<double>> y(n);
         for (int i = 0; i < n / 2; ++i) {
             std::complex<double> t = std::polar(1.0, -2 * M_PI * i / n) * r[i];
@@ -37,9 +33,8 @@ public:
         return y;
     }
 
-    // Обратное преобразование Фурье
     std::vector<std::complex<double>> ifft(std::vector<std::complex<double>>& x) {
-        // Конвертация вектора комплексных чисел к обратному порядку значений
+
         std::vector<std::complex<double>> y = fft(x);
         std::vector<std::complex<double>> z(y.size());
         for (int i = 0; i < y.size(); ++i) {
@@ -49,11 +44,9 @@ public:
     }
 };
 
-// Пример использования класса
 int main() {
     FFT fft;
 
-    // Создание случайного вектора комплексных чисел длиной кратной 2, 3 или 5
     const int N = 20;
     std::vector<std::complex<double>> x(N);
     for (int i = 0; i < x.size(); ++i) {
@@ -62,11 +55,9 @@ int main() {
         x[i] = std::complex<double>(re, im);
     }
 
-    // Применение прямого и обратного преобразования
     std::vector<std::complex<double>> y = fft.fft(x);
     std::vector<std::complex<double>> z = fft.ifft(y);
 
-    // Вывод результатов
     std::cout << "Input: ";
     for (auto& elem : x) {
         std::cout << elem << " ";
@@ -84,8 +75,6 @@ int main() {
         std::cout << elem << " ";
     }
     std::cout << std::endl << std::endl;
-
-    // Вычисление ошибки между входными и выходными данными
 
     double error_lst[N];
     double error = 0.0;
